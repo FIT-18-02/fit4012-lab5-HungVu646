@@ -12,6 +12,9 @@
 
 using namespace std;
 
+/* =====================================================
+   GALOIS FIELD MULTIPLICATION
+===================================================== */
 
 unsigned char gmul(unsigned char a,
                    unsigned char b)
@@ -40,6 +43,9 @@ unsigned char gmul(unsigned char a,
     return p;
 }
 
+/* =====================================================
+   ADD ROUND KEY
+===================================================== */
 
 void AddRoundKey(unsigned char *state,
                  unsigned char *roundKey)
@@ -50,6 +56,10 @@ void AddRoundKey(unsigned char *state,
     }
 }
 
+/* =====================================================
+   INVERSE SUB BYTES
+===================================================== */
+
 void InvSubBytes(unsigned char *state)
 {
     for (int i = 0; i < 16; i++)
@@ -58,6 +68,9 @@ void InvSubBytes(unsigned char *state)
     }
 }
 
+/* =====================================================
+   INVERSE SHIFT ROWS
+===================================================== */
 
 void InvShiftRows(unsigned char *state)
 {
@@ -89,6 +102,9 @@ void InvShiftRows(unsigned char *state)
     }
 }
 
+/* =====================================================
+   INVERSE MIX COLUMNS
+===================================================== */
 
 void InvMixColumns(unsigned char *state)
 {
@@ -134,6 +150,9 @@ void InvMixColumns(unsigned char *state)
     }
 }
 
+/* =====================================================
+   AES DECRYPT BLOCK
+===================================================== */
 
 void AESDecrypt(unsigned char *input,
                 unsigned char *expandedKey,
@@ -174,6 +193,9 @@ void AESDecrypt(unsigned char *input,
     }
 }
 
+/* =====================================================
+   LOAD AES KEY
+===================================================== */
 
 bool LoadKey(unsigned char *key)
 {
@@ -221,6 +243,9 @@ bool LoadKey(unsigned char *key)
     return true;
 }
 
+/* =====================================================
+   PRINT HEX
+===================================================== */
 
 void PrintHex(unsigned char *data,
               int len)
@@ -237,6 +262,8 @@ void PrintHex(unsigned char *data,
     cout << dec << endl;
 }
 
+/*  MAIN
+===================================================== */
 
 int main()
 {
@@ -249,6 +276,8 @@ int main()
     cout << "=================================="
          << endl;
 
+    /* READ CIPHERTEXT
+    ================================================= */
 
     ifstream infile(
         "message.aes",
@@ -311,6 +340,9 @@ int main()
     cout << "[INFO] Key expansion completed"
          << endl;
 
+    /* =================================================
+       DECRYPT
+    ================================================= */
 
     vector<unsigned char> decrypted(
         fileSize
@@ -348,6 +380,7 @@ int main()
 
     cout << endl;
 
+    /* SAVE FILE */
 
     ofstream outfile("decrypted.txt");
 

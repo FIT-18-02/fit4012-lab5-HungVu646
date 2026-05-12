@@ -13,6 +13,9 @@
 
 using namespace std;
 
+/* =====================================================
+   AES BASIC FUNCTIONS
+===================================================== */
 
 void AddRoundKey(unsigned char * state,
                  unsigned char * roundKey) {
@@ -96,6 +99,9 @@ void MixColumns(unsigned char * state) {
     }
 }
 
+/* =====================================================
+   KEY EXPANSION
+===================================================== */
 
 void RotWord(unsigned char * w) {
 
@@ -153,6 +159,9 @@ void KeyExpansion(unsigned char * key,
     }
 }
 
+/* =====================================================
+   AES ENCRYPT
+===================================================== */
 
 void Round(unsigned char * state,
            unsigned char * key) {
@@ -201,6 +210,9 @@ void AESEncrypt(unsigned char * message,
     }
 }
 
+/* =====================================================
+   HELPER FUNCTIONS
+===================================================== */
 
 bool LoadKey(unsigned char * key) {
 
@@ -271,6 +283,9 @@ void XORBlocks(unsigned char * a,
     }
 }
 
+/* =====================================================
+   MAIN
+===================================================== */
 
 int main() {
 
@@ -283,6 +298,9 @@ int main() {
     cout << "===================================="
          << endl;
 
+    /* =================================================
+       INPUT PLAINTEXT
+    ================================================= */
 
     char message[2048];
 
@@ -316,6 +334,9 @@ int main() {
     cout << "[INFO] Padded Length : "
          << paddedLen << endl;
 
+    /* =================================================
+       LOAD KEY
+    ================================================= */
 
     unsigned char key[16];
 
@@ -333,6 +354,9 @@ int main() {
     cout << "[INFO] Key Expansion Completed"
          << endl;
 
+    /* =================================================
+       GENERATE IV
+    ================================================= */
 
     srand((unsigned int)time(nullptr));
 
@@ -346,6 +370,9 @@ int main() {
 
     PrintHex(iv, 16);
 
+    /* =================================================
+       CBC ENCRYPTION
+    ================================================= */
 
     unsigned char * encryptedMessage =
         new unsigned char[paddedLen];
@@ -377,11 +404,19 @@ int main() {
         );
     }
 
+    /* =================================================
+       PRINT CIPHERTEXT
+    ================================================= */
 
     cout << "\nCiphertext (HEX):" << endl;
 
     PrintHex(encryptedMessage, paddedLen);
 
+    /* =================================================
+       SAVE FILE
+       FORMAT:
+       [16-byte IV][ciphertext]
+    ================================================= */
 
     ofstream outfile(
         "message_cbc.aes",
@@ -414,7 +449,9 @@ int main() {
     cout << "\n[INFO] Saved to message_cbc.aes"
          << endl;
 
-
+    /* =================================================
+       WRITE HEX LOG
+    ================================================= */
 
     ofstream hexlog("cbc_hex.txt");
 
@@ -452,6 +489,9 @@ int main() {
     cout << "[INFO] Hex log saved to cbc_hex.txt"
          << endl;
 
+    /* =================================================
+       CLEANUP
+    ================================================= */
 
     delete[] paddedMessage;
     delete[] encryptedMessage;

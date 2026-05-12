@@ -11,6 +11,9 @@
 
 using namespace std;
 
+/* =====================================================
+   AES HELPER FUNCTIONS
+===================================================== */
 
 unsigned char Multiply(unsigned char x, unsigned char y)
 {
@@ -38,6 +41,9 @@ unsigned char Multiply(unsigned char x, unsigned char y)
     return result;
 }
 
+/* =====================================================
+   AES CORE FUNCTIONS
+===================================================== */
 
 void AddRoundKey(unsigned char *state,
                  unsigned char *roundKey)
@@ -129,6 +135,9 @@ void MixColumns(unsigned char *state)
     }
 }
 
+/* =====================================================
+   AES ROUNDS
+===================================================== */
 
 void Round(unsigned char *state,
            unsigned char *roundKey)
@@ -176,6 +185,9 @@ void AESEncrypt(unsigned char *message,
     }
 }
 
+/* =====================================================
+   FILE / IO HELPERS
+===================================================== */
 
 bool LoadKey(unsigned char *key)
 {
@@ -234,6 +246,9 @@ void PrintHex(unsigned char *data,
     cout << dec << endl;
 }
 
+/* =====================================================
+   MAIN
+===================================================== */
 
 int main()
 {
@@ -282,6 +297,9 @@ int main()
          << " bytes"
          << endl;
 
+    /* ================================================
+       LOAD AES KEY
+    ================================================= */
 
     unsigned char key[16];
 
@@ -296,6 +314,9 @@ int main()
     cout << "\n[INFO] AES Key Loaded Successfully"
          << endl;
 
+    /* ================================================
+       KEY EXPANSION
+    ================================================= */
 
     unsigned char expandedKey[176];
 
@@ -304,6 +325,9 @@ int main()
     cout << "[INFO] Key Expansion Completed"
          << endl;
 
+    /* ================================================
+       ENCRYPT BLOCKS
+    ================================================= */
 
     for (int i = 0;
          i < paddedMessageLen;
@@ -316,6 +340,9 @@ int main()
         );
     }
 
+    /* ================================================
+       PRINT HEX OUTPUT
+    ================================================= */
 
     cout << "\nEncrypted Message (HEX):"
          << endl;
@@ -325,6 +352,9 @@ int main()
         paddedMessageLen
     );
 
+    /* ================================================
+       WRITE BINARY FILE
+    ================================================= */
 
     ofstream outfile(
         "message.aes",
@@ -352,6 +382,9 @@ int main()
     cout << "\n[INFO] Ciphertext written to message.aes"
          << endl;
 
+    /* ================================================
+       WRITE HEX LOG
+    ================================================= */
 
     ofstream hexlog("message_hex.txt");
 
@@ -374,6 +407,9 @@ int main()
     cout << "[INFO] Hex dump written to message_hex.txt"
          << endl;
 
+    /* ================================================
+       CLEANUP
+    ================================================= */
 
     delete[] paddedMessage;
     delete[] encryptedMessage;

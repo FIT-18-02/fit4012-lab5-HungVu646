@@ -13,7 +13,9 @@
 
 using namespace std;
 
-
+/* =====================================================
+   BASIC AES FUNCTIONS
+===================================================== */
 
 void SubRoundKey(unsigned char * state,
                  unsigned char * roundKey) {
@@ -23,6 +25,9 @@ void SubRoundKey(unsigned char * state,
     }
 }
 
+/* =====================================================
+   INVERSE MIX COLUMNS
+===================================================== */
 
 void InverseMixColumns(unsigned char * state) {
 
@@ -62,6 +67,9 @@ void InverseMixColumns(unsigned char * state) {
     }
 }
 
+/* =====================================================
+   SHIFT ROWS (RIGHT SHIFT)
+===================================================== */
 
 void ShiftRows(unsigned char * state) {
 
@@ -92,6 +100,9 @@ void ShiftRows(unsigned char * state) {
     }
 }
 
+/* =====================================================
+   INVERSE SUB BYTES
+===================================================== */
 
 void SubBytes(unsigned char * state) {
 
@@ -100,6 +111,9 @@ void SubBytes(unsigned char * state) {
     }
 }
 
+/* =====================================================
+   AES DECRYPTION ROUNDS
+===================================================== */
 
 void Round(unsigned char * state,
            unsigned char * key) {
@@ -123,6 +137,9 @@ void InitialRound(unsigned char * state,
     SubBytes(state);
 }
 
+/* =====================================================
+   KEY EXPANSION
+===================================================== */
 
 void RotWord(unsigned char * w) {
 
@@ -180,6 +197,9 @@ void KeyExpansion(unsigned char * key,
     }
 }
 
+/* =====================================================
+   AES DECRYPT
+===================================================== */
 
 void AESDecrypt(unsigned char * encryptedMessage,
                 unsigned char * expandedKey,
@@ -208,6 +228,9 @@ void AESDecrypt(unsigned char * encryptedMessage,
     }
 }
 
+/* =====================================================
+   HELPER FUNCTIONS
+===================================================== */
 
 bool LoadKey(unsigned char * key) {
 
@@ -278,6 +301,9 @@ void PrintHex(unsigned char * data,
     cout << dec << endl;
 }
 
+/* =====================================================
+   MAIN
+===================================================== */
 
 int main() {
 
@@ -290,6 +316,9 @@ int main() {
     cout << "===================================="
          << endl;
 
+    /* =================================================
+       OPEN FILE
+    ================================================= */
 
     ifstream infile(
         "message_cbc.aes",
@@ -317,6 +346,10 @@ int main() {
         return 1;
     }
 
+    /* =================================================
+       READ IV
+    ================================================= */
+
     unsigned char iv[16];
 
     infile.read(
@@ -328,6 +361,9 @@ int main() {
 
     PrintHex(iv, 16);
 
+    /* =================================================
+       READ CIPHERTEXT
+    ================================================= */
 
     int ciphertextSize = fileSize - 16;
 
@@ -345,6 +381,10 @@ int main() {
          << " bytes ciphertext"
          << endl;
 
+    /* =================================================
+       LOAD KEY
+    ================================================= */
+
     unsigned char key[16];
 
     if (!LoadKey(key)) {
@@ -358,6 +398,9 @@ int main() {
     cout << "[INFO] Key Expansion Completed"
          << endl;
 
+    /* =================================================
+       CBC DECRYPTION
+    ================================================= */
 
     vector<unsigned char> plaintext(ciphertextSize);
 
@@ -388,6 +431,10 @@ int main() {
         );
     }
 
+    /* =================================================
+       PRINT HEX
+    ================================================= */
+
     cout << "\nRecovered Plaintext (HEX):"
          << endl;
 
@@ -396,6 +443,9 @@ int main() {
         ciphertextSize
     );
 
+    /* =================================================
+       PRINT PLAINTEXT
+    ================================================= */
 
     cout << "\nRecovered Plaintext:"
          << endl;
@@ -409,6 +459,9 @@ int main() {
 
     cout << endl;
 
+    /* =================================================
+       SAVE PLAINTEXT
+    ================================================= */
 
     ofstream outfile("cbc_decrypted.txt");
 
